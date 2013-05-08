@@ -3,11 +3,12 @@
   (:require [clojure.edn :refer [read-string]]
             [cemerick.pomegranate :refer [add-classpath]]))
 
-(defn dire
+(defn activate
   "Load the project's Dire load sites into the JVM."
-  [project & args]
+  []
+  (prn "Executing")
   (let [deps (clojure.java.io/resource "resources/dire/dependencies.edn")]
-     (apply add-classpath (:source-paths project))
+    (add-classpath "/home/xpherior/scratch/dire-examples/src")
     (doseq [namespace (read-string (slurp deps))]
       (require namespace))))
 
