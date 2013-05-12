@@ -6,6 +6,7 @@
 (defn middleware
   "Load the project's Dire load sites into the JVM."
   [project]
-  (let [deps (read-string (slurp (clojure.java.io/resource (:dire project))))]
-    (assoc project :injections deps)))
+  (let [deps (apply concat (vals (read-string (slurp (clojure.java.io/resource (:dire project))))))
+        reqs (map (fn [x] (conj (list (symbol x)) 'require)) deps)]
+    (assoc project :injections reqs)))
 
