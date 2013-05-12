@@ -1,14 +1,11 @@
 (ns leiningen.dire
-  (:refer-clojure :exclude [read-string add-classpath])
+  (:refer-clojure :exclude [read-string])
   (:require [clojure.edn :refer [read-string]]
-            [cemerick.pomegranate :refer [add-classpath]]))
+            [leiningen.core.eval :refer [eval-in-project]]))
 
-(defn activate
+(defn middleware
   "Load the project's Dire load sites into the JVM."
-  []
-  (prn "Executing")
-  (let [deps (clojure.java.io/resource "resources/dire/dependencies.edn")]
-    (add-classpath "/home/xpherior/scratch/dire-examples/src")
-    (doseq [namespace (read-string (slurp deps))]
-      (require namespace))))
+  [project]
+  (let [deps (read-string (slurp (clojure.java.io/resource (:dire project))))]
+    (assoc project :injections deps)))
 

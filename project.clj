@@ -3,7 +3,6 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[com.cemerick/pomegranate "0.2.0"]
-                 [dire "0.4.2"]]
+  :dependencies [[dire "0.4.3"]]
   :eval-in-leiningen true)
 
