@@ -8,5 +8,5 @@
   [project]
   (let [deps (apply concat (vals (read-string (slurp (clojure.java.io/resource (:dire project))))))
         reqs (map (fn [x] (conj (list (symbol x)) 'require)) deps)]
-    (assoc project :injections reqs)))
+    (update-in project [:injections] concat reqs)))
 
