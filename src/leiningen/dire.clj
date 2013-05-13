@@ -4,13 +4,11 @@
             [leiningen.core.eval :refer [eval-in-project]]))
 
 (defn reduce-vals [coll]
-  (let [values (vals coll)]
-    (mapcat
-     (fn [x]
-       (if (map? x)
-         (reduce-vals x)
-         x))
-     values)))
+  (mapcat (fn [x]
+            (if (map? x)
+              (reduce-vals x)
+              x))
+          (vals coll)))
 
 (defn form-require [x]
   (conj (list (symbol x)) 'require))
