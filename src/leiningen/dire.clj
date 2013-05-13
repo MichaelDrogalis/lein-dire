@@ -3,10 +3,24 @@
   (:require [clojure.edn :refer [read-string]]
             [leiningen.core.eval :refer [eval-in-project]]))
 
+(defn reduce-vals [coll]
+  (let [values (vals coll)]
+    (mapcat
+     (fn [x]
+       (if (map? x)
+         (reduce-vals x)
+         x))
+     values)))
+
+(defn form-require [x]
+  (conj (list (symbol x)) 'require))
+
 (defn middleware
   "Load the project's Dire load sites into the JVM."
   [project]
-  (let [deps (apply concat (vals (read-string (slurp (clojure.java.io/resource (:dire project))))))
-        reqs (map (fn [x] (conj (list (symbol x)) 'require)) deps)]
+  (let [dependency-map (read-string (slurp (clojure.java.io/resource (:dire project))))
+        dependency-seq (reduce-vals dependency-map)
+        reqs (map form-require dependency-seq)]
     (update-in project [:injections] concat reqs)))
+
 
